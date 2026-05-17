@@ -1,0 +1,67 @@
+<div class="admin-container">
+  <div class="admin-header">
+    <div>
+      <div class="admin-badge">👑 Admin Panel</div>
+      <h1>Account Management</h1>
+      <p>Manage all registered accounts in the system</p>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num">{{ accounts.length }}</span>
+        <span class="stat-label">Total Accounts</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">{{ adminCount }}</span>
+        <span class="stat-label">Admins</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">{{ verifiedCount }}</span>
+        <span class="stat-label">Verified</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="error-msg" *ngIf="error">{{ error }}</div>
+
+  <div class="table-container" *ngIf="!loading; else loadingTpl">
+    <table *ngIf="accounts.length > 0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Joined</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let acc of accounts">
+          <td class="id-cell">{{ acc.id }}</td>
+          <td class="name-cell">{{ acc.firstName }} {{ acc.lastName }}</td>
+          <td class="email-cell">{{ acc.email }}</td>
+          <td>
+            <span class="badge" [class.admin-badge-pill]="acc.role === 'Admin'">{{ acc.role }}</span>
+          </td>
+          <td>
+            <span class="status-badge" [class.verified]="acc.isVerified" [class.unverified]="!acc.isVerified">
+              {{ acc.isVerified ? '✓ Verified' : '✗ Unverified' }}
+            </span>
+          </td>
+          <td class="date-cell">{{ acc.createdAt | date:'shortDate' }}</td>
+          <td class="actions-cell">
+            <button class="btn-delete" (click)="deleteAccount(acc)" [disabled]="isCurrentUser(acc)">
+              {{ isCurrentUser(acc) ? 'You' : 'Delete' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="empty" *ngIf="accounts.length === 0">No accounts found.</div>
+  </div>
+
+  <ng-template #loadingTpl>
+    <div class="loading-state">Loading accounts...</div>
+  </ng-template>
+</div>

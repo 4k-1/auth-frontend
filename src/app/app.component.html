@@ -1,0 +1,21 @@
+<nav class="navbar">
+  <div class="nav-brand">
+    <a routerLink="/"> AuthSystem</a>
+  </div>
+  <div class="nav-links">
+    <ng-container *ngIf="account; else guestLinks">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
+      <a routerLink="/profile" routerLinkActive="active">Profile</a>
+      <a *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active">Admin</a>
+      <button class="btn-logout" (click)="logout()">Logout</button>
+      <span class="user-badge" [class.admin]="isAdmin">{{ account.role }}</span>
+    </ng-container>
+    <ng-template #guestLinks>
+      <a routerLink="/account/login" routerLinkActive="active">Login</a>
+      <a routerLink="/account/register" routerLinkActive="active" class="btn-register">Register</a>
+    </ng-template>
+  </div>
+</nav>
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: auth-frontend
+    env: static
+    buildCommand: npm install && npm run build:prod
+    staticPublishPath: dist/auth-frontend/browser
+    # SPA Rewrite Rule - REQUIRED for Angular deep links / email verification links
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

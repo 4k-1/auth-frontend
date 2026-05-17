@@ -1,0 +1,27 @@
+<div class="home-container">
+  <div class="hero">
+    <div class="hero-badge">Full-Stack Auth System</div>
+    <h1>Secure Authentication<br><span class="gradient-text">Built with Angular + Node.js</span></h1>
+    
+
+    <ng-container *ngIf="!account; else loggedIn">
+      <div class="cta-buttons">
+        <a routerLink="/account/register" class="btn-primary">Get Started →</a>
+        <a routerLink="/account/login" class="btn-secondary">Sign In</a>
+      </div>
+    </ng-container>
+    <ng-template #loggedIn>
+      <div class="welcome-card">
+        <div class="welcome-icon">👋</div>
+        <div class="welcome-info">
+          <strong>Welcome back, {{ account!.firstName }}!</strong>
+          <span class="role-badge" [class.admin]="account!.role === 'Admin'">{{ account!.role }}</span>
+        </div>
+        <div class="welcome-links">
+          <a routerLink="/profile">My Profile</a>
+          <a *ngIf="account!.role === 'Admin'" routerLink="/admin">Admin Panel</a>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

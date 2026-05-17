@@ -1,0 +1,13 @@
+<div class="auth-header">
+  <h2>Email Verification</h2>
+</div>
+<div class="status-box" [class.loading]="status === 'verifying'" [class.success]="status === 'success'" [class.error]="status === 'error'">
+  <div class="status-icon">
+    <span *ngIf="status === 'verifying'">⏳</span>
+    <span *ngIf="status === 'success'">✅</span>
+    <span *ngIf="status === 'error'">❌</span>
+  </div>
+  <p>{{ message }}</p>
+  <a *ngIf="status === 'success'" routerLink="/account/login" class="btn-primary">Go to Login</a>
+  <a *ngIf="status === 'error'" routerLink="/account/register" class="btn-primary">Back to Register</a>
+</div>
