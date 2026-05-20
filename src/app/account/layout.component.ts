@@ -1,21 +1,15 @@
 import { Component } from '@angular/core';
+import {Router} from '@angular/router';
 
-@Component({
-  templateUrl: './layout.component.html',
-  styles: [`
-    .auth-wrapper {
-      min-height: calc(100vh - 60px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f5f5f5;
-      padding: 2rem;
+import {AccountService} from '../_services';
+import { last } from 'rxjs';
+
+@Component({ selector: 'app-account-layout', templateUrl: 'layout.component.html', standalone: false })
+export class LayoutComponent {
+  constructor(private router: Router, private accountService: AccountService) 
+  {
+    if (this.accountService.accountValue) {
+      this.router.navigate(['/']);
     }
-    .auth-card {
-      background: transparent;
-      width: 100%;
-      max-width: 440px;
-    }
-  `]
-})
-export class AccountLayoutComponent { }
+  }
+}

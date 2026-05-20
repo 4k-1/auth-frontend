@@ -3,57 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../_services/account.service';
 
 @Component({
-  templateUrl: './verify-email.component.html',
-  styles: [`
-    .auth-header h2 {
-      color: #333;
-      font-size: 24px;
-      margin: 0 0 1.5rem;
-      font-weight: 600;
-    }
-    .status-box {
-      text-align: center;
-      padding: 30px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      background: #f9f9f9;
-    }
-    .status-box.loading {
-      border-color: #0066cc;
-      background: #f0f8ff;
-    }
-    .status-box.success {
-      border-color: #4caf50;
-      background: #e8f5e9;
-    }
-    .status-box.error {
-      border-color: #d32f2f;
-      background: #ffebee;
-    }
-    .status-icon {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
-    }
-    p {
-      color: #333;
-      font-size: 14px;
-      margin: 0 0 20px;
-    }
-    .btn-primary {
-      display: inline-block;
-      padding: 10px 24px;
-      background: #0066cc;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    .btn-primary:hover {
-      background: #0052a3;
-    }
-  `]
-})
+  templateUrl: './verify-email.component.html', standalone: false})
+  
 export class VerifyEmailComponent implements OnInit {
   status = 'verifying';
   message = 'Verifying your email address...';
