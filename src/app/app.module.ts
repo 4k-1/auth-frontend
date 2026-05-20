@@ -9,31 +9,26 @@ import { JwtInterceptor } from './_helpers/jwt.interceptor';
 import { ErrorInterceptor } from './_helpers/error.interceptor';
 import { environment } from '../environments/environment';
 import { fakeBackendProvider } from './_helpers/fake-backend';
-import { Alert } from './_models';
 import { AlertComponent } from './_components';
 import { HomeComponent } from './home';
-import { LoginComponent } from './account/login.component';
-import { RegisterComponent } from './account/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AlertComponent,
-    HomeComponent,
-    LoginComponent,
-    RegisterComponent
+    HomeComponent
+    // ✅ REMOVED LoginComponent and RegisterComponent from here
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule
+    // ✅ NOT importing AccountModule here (it's lazy loaded)
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    // Enable fake backend for Stage A testing
-    // Comment out the line below to switch to real backend (Stage B)
     ...(environment.useFakeBackend ? [fakeBackendProvider] : [])
   ],
   bootstrap: [AppComponent]

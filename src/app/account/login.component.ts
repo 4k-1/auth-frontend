@@ -5,6 +5,7 @@ import { AccountService } from '../_services/account.service';
 
 @Component({
   templateUrl: './login.component.html'
+  // ✅ Removed styles array
 })
 export class LoginComponent implements OnInit {
   form!: FormGroup;
@@ -17,13 +18,17 @@ export class LoginComponent implements OnInit {
               private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    if (this.accountService.accountValue) {
-      this.router.navigate(['/']);
-    }
+    // Initialize form FIRST
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+    
+    // Check if already logged in
+    if (this.accountService.accountValue) {
+      this.router.navigate(['/']);
+    }
+    
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
@@ -38,8 +43,10 @@ export class LoginComponent implements OnInit {
     this.accountService.login(this.f['email'].value, this.f['password'].value)
       .subscribe({
         next: () => this.router.navigateByUrl(this.returnUrl),
-        error: err => { this.error = err; this.loading = false; }
+        error: err => { 
+          this.error = err;
+          this.loading = false;
+        }
       });
   }
 }
-
