@@ -1,6 +1,24 @@
 <h3 class="card-header">Register</h3>
 <div class="card-body">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="form">
+        
+        <!-- Title Dropdown -->
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <select formControlName="title" class="form-control" [ngClass]="{'is-invalid': submitted && f['title']?.invalid}">
+                <option value="">Select Title</option>
+                <option value="Mr">Mr</option>
+                <option value="Mrs">Mrs</option>
+                <option value="Ms">Ms</option>
+                <option value="Dr">Dr</option>
+                <option value="Prof">Prof</option>
+            </select>
+            <div *ngIf="submitted && f['title']?.invalid">
+                <div *ngIf="f['title']?.hasError('required')" class="invalid-feedback">Title is required</div>
+            </div>
+        </div>
+
+        <!-- First Name -->
         <div class="mb-3">
             <label class="form-label">First Name</label>
             <input type="text" formControlName="firstName" class="form-control" [ngClass]="{'is-invalid': submitted && f['firstName']?.invalid}" />
@@ -9,6 +27,7 @@
             </div>
         </div>
 
+        <!-- Last Name -->
         <div class="mb-3">
             <label class="form-label">Last Name</label>
             <input type="text" formControlName="lastName" class="form-control" [ngClass]="{'is-invalid': submitted && f['lastName']?.invalid}" />
@@ -17,6 +36,7 @@
             </div>
         </div>
 
+        <!-- Email -->
         <div class="mb-3">
             <label class="form-label">Email</label>
             <input type="email" formControlName="email" class="form-control" [ngClass]="{'is-invalid': submitted && f['email']?.invalid}" />
@@ -26,6 +46,7 @@
             </div>
         </div>
 
+        <!-- Password -->
         <div class="mb-3">
             <label class="form-label">Password</label>
             <input type="password" formControlName="password" class="form-control" [ngClass]="{'is-invalid': submitted && f['password']?.invalid}" />
@@ -35,12 +56,22 @@
             </div>
         </div>
 
+        <!-- Confirm Password -->
         <div class="mb-3">
             <label class="form-label">Confirm Password</label>
             <input type="password" formControlName="confirmPassword" class="form-control" [ngClass]="{'is-invalid': submitted && f['confirmPassword']?.invalid}" />
             <div *ngIf="submitted && f['confirmPassword']?.invalid">
                 <div *ngIf="f['confirmPassword']?.hasError('required')" class="invalid-feedback">Confirm Password is required</div>
                 <div *ngIf="f['confirmPassword']?.hasError('mustMatch')" class="invalid-feedback">Passwords must match</div>
+            </div>
+        </div>
+
+        <!-- Accept Terms Checkbox -->
+        <div class="mb-3 form-check">
+            <input type="checkbox" formControlName="acceptTerms" class="form-check-input" [ngClass]="{'is-invalid': submitted && f['acceptTerms']?.invalid}" />
+            <label class="form-check-label">I accept the terms and conditions</label>
+            <div *ngIf="submitted && f['acceptTerms']?.invalid">
+                <div *ngIf="f['acceptTerms']?.hasError('required')" class="invalid-feedback">You must accept the terms</div>
             </div>
         </div>
 

@@ -1,28 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '../_services/account.service';
+import { first } from 'rxjs/operators';
 
-@Component({ templateUrl: 'register.component.html', standalone: false })
+// Custom validator for matching passwords
+export function mustMatch(controlName: string, matchingControlName: string) {
+  return (formGroup: FormGroup) => {
+    const control = formGroup.controls[controlName];
+    const matchingControl = formGroup.controls[matchingControlName];
+
+    if (matchingControl.errors && !matchingControl.errors['mustMatch']) {
+      return;
+    }
+
+    if (control.value !== matchingControl.value) {
+      matchingControl.setErrors({ mustMatch: true });
+    } else {
+      matchingControl.setErrors(null);
+    }
+  };
+}
+
+@Component({
+  templateUrl: './register.component.html'
+})
 export class RegisterComponent implements OnInit {
   form!: FormGroup;
   loading = false;
   submitted = false;
   error = '';
-  success = '';
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    if (this.accountService.accountValue) this.router.navigate(['/']);
     this.form = this.fb.group({
+      title: ['', Validators.required],  // 👈 Title dropdown
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
       acceptTerms: [false, Validators.requiredTrue]
-    }, { validators: mustMatch('password', 'confirmPassword') });
+    }, {
+      validator: mustMatch('password', 'confirmPassword')
+    });
   }
 
   get f() { return this.form.controls; }
@@ -30,31 +57,24 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     this.error = '';
-    if (this.form.invalid) return;
+
+    if (this.form.invalid) {
+      return;
+    }
 
     this.loading = true;
     this.accountService.register(this.form.value)
+      .pipe(first())
       .subscribe({
-        next: (res: any) => {
-          this.success = res.message || 'Registration successful! Please check your email to verify your account.';
-          this.loading = false;
+        next: () => {
+          this.router.navigate(['/account/login'], { 
+            queryParams: { registered: true } 
+          });
         },
-        error: err => { this.error = err; this.loading = false; }
+        error: error => {
+          this.error = error.error?.message || error.message || 'Registration failed';
+          this.loading = false;
+        }
       });
   }
-}
-
-function mustMatch(controlName: string, matchingControlName: string) {
-  return (group: AbstractControl) => {
-    const control = group.get(controlName);
-    const matchingControl = group.get(matchingControlName);
-    if (!control || !matchingControl) return null;
-    if (matchingControl.errors && !matchingControl.errors['mustMatch']) return null;
-    if (control.value !== matchingControl.value) {
-      matchingControl.setErrors({ mustMatch: true });
-    } else {
-      matchingControl.setErrors(null);
-    }
-    return null;
-  };
 }
