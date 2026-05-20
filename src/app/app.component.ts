@@ -3,13 +3,22 @@ import { Router } from '@angular/router';
 import { AccountService } from './_services/account.service';
 import { Account } from './_models/account';
 
+// ADD THIS ENUM HERE - before @Component
+export enum Role {
+  Admin = 'Admin',
+  User = 'User'
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-     standalone: false
+  standalone: false
 })
 export class AppComponent implements OnInit {
   account: Account | null = null;
+  
+  // ADD THIS LINE - makes Role available in template
+  Role = Role;
 
   constructor(private accountService: AccountService, private router: Router) {}
 

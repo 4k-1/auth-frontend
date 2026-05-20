@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
 import { SubNavComponent } from './subnav.component';
@@ -24,7 +25,14 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes)
+    ],
+    declarations: [
+        SubNavComponent,
+        OverviewComponent
+    ],
     exports: [RouterModule]
 })
-export class AdminRoutingModule { }
+export class AdminModule { }

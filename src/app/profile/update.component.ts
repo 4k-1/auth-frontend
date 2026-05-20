@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 
-import { UserService, AlertService } from './_services';
+import { UserService, AlertService } from '../_services';
 
 @Component({
   selector: 'app-profile-update',
@@ -39,7 +39,7 @@ export class UpdateComponent implements OnInit {
     // Load user data
     this.userService.getProfile()
       .pipe(first())
-      .subscribe(user => {
+      .subscribe((user: any) => {
         this.form.patchValue(user);
         this.userId = user.id;
       });
@@ -95,7 +95,7 @@ export class UpdateComponent implements OnInit {
           this.alertService.success('Profile updated successfully', { autoClose: true });
           this.router.navigate(['../details'], { relativeTo: this.route });
         },
-        error: (error) => {
+        error: (error: any) => {
           this.alertService.error(error);
           this.submitting = false;
         }
@@ -112,7 +112,7 @@ export class UpdateComponent implements OnInit {
             this.alertService.success('Account deleted successfully');
             this.router.navigate(['/']);
           },
-          error: (error) => {
+          error: (error: any) => {
             this.alertService.error(error);
             this.deleting = false;
           }

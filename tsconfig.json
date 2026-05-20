@@ -1,8 +1,13 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "ignoreDeprecations": "5.0",
+    "baseUrl": "./src",
+    "rootDir": "./src",
     "outDir": "./dist/out-tsc",
+    "paths": {
+      "@app/*": ["app/*"]
+    },
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,

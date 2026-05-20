@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AccountLayoutComponent } from './layout.component';
+import { LayoutComponent } from './layout.component';
 import { LoginComponent } from './login.component';
 import { RegisterComponent } from './register.component';
 import { VerifyEmailComponent } from './verify-email.component';
@@ -12,7 +12,7 @@ import { ResetPasswordComponent } from './reset-password.component';
 
 const routes: Routes = [
   {
-    path: '', component: AccountLayoutComponent,
+    path: '', component: LayoutComponent,
     children: [
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
@@ -25,7 +25,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    AccountLayoutComponent,
+    LayoutComponent,
     LoginComponent,
     RegisterComponent,
     VerifyEmailComponent,

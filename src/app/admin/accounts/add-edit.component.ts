@@ -8,9 +8,9 @@ import { AccountService } from '../../_services/account.service';
 
 @Component({
     selector: 'app-account-add-edit',
-    templateUrl: './account-add-edit.component.html'
+    templateUrl: './add-edit.component.html'
 })
-export class AccountAddEditComponent implements OnInit {
+export class AddEditComponent implements OnInit {
     title: string = '';
     form!: FormGroup;
     id?: number; // Changed from string to number

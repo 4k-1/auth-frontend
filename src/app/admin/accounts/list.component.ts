@@ -7,16 +7,19 @@ import { AlertService } from '../../_services/alert.service';
 import { AccountService } from '../../_services/account.service'; 
 
 @Component({
-    selector: 'app-account-add-edit',
-    templateUrl: './account-add-edit.component.html'
+    selector: 'app-account-list',
+    templateUrl: './list.component.html'
 })
-export class AccountAddEditComponent implements OnInit {
+export class ListComponent implements OnInit {
     title: string = '';
     form!: FormGroup;
-    id?: number; // Changed from string to number
+    id?: number;
     loading = false;
     submitting = false;
     submitted = false;
+    
+    // ADD THESE TWO PROPERTIES
+    accounts: any[] = [];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -27,9 +30,11 @@ export class AccountAddEditComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        // Convert string param to number with +
+        // LOAD ACCOUNTS LIST - ADD THIS
+        this.loadAccounts();
+        
         const idParam = this.route.snapshot.params['id'];
-        this.id = idParam ? +idParam : undefined; // The '+' converts string to number
+        this.id = idParam ? +idParam : undefined;
         
         this.title = this.id ? 'Edit Account' : 'Add Account';
 
@@ -47,7 +52,7 @@ export class AccountAddEditComponent implements OnInit {
 
         this.loading = true;
         if (this.id) {
-            this.accountService.getById(this.id) // Now this.id is number
+            this.accountService.getById(this.id)
                 .pipe(first())
                 .subscribe({
                     next: (account) => {
@@ -61,6 +66,37 @@ export class AccountAddEditComponent implements OnInit {
                 });
         } else {
             this.loading = false;
+        }
+    }
+
+    // ADD THIS METHOD TO LOAD ACCOUNTS
+    loadAccounts() {
+        this.accountService.getAll()
+            .pipe(first())
+            .subscribe({
+                next: (accounts) => {
+                    this.accounts = accounts;
+                },
+                error: (error) => {
+                    this.alertService.error(error);
+                }
+            });
+    }
+
+    // ADD THIS DELETE METHOD
+    deleteAccount(id: number) {
+        if (confirm('Are you sure you want to delete this account?')) {
+            this.accountService.delete(id)
+                .pipe(first())
+                .subscribe({
+                    next: () => {
+                        this.accounts = this.accounts.filter(x => x.id !== id);
+                        this.alertService.success('Account deleted successfully');
+                    },
+                    error: (error) => {
+                        this.alertService.error(error);
+                    }
+                });
         }
     }
 
@@ -88,7 +124,6 @@ export class AccountAddEditComponent implements OnInit {
     onSubmit() {
         this.submitted = true;
 
-        // stop here if form is invalid
         if (this.form.invalid) {
             return;
         }
@@ -97,16 +132,14 @@ export class AccountAddEditComponent implements OnInit {
         
         const accountData = this.form.value;
         
-        // remove confirmPassword from data
         delete accountData.confirmPassword;
         
-        // if password is empty, remove it from the data
         if (!accountData.password) {
             delete accountData.password;
         }
 
         const action = this.id 
-            ? this.accountService.update(this.id, accountData) // Now this.id is number
+            ? this.accountService.update(this.id, accountData)
             : this.accountService.create(accountData);
 
         action.pipe(first(), finalize(() => {

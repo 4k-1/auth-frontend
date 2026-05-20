@@ -103,6 +103,31 @@ export class AccountService {
       }));
   }
 
+  // Alias methods for profile component compatibility
+  getProfile(): Observable<Account> {
+    const account = this.accountValue;
+    if (!account || !account.id) {
+      return this.http.get<Account>(`${baseUrl}/profile`);
+    }
+    return this.getById(account.id);
+  }
+
+  updateProfile(id: string | undefined, params: any): Observable<any> {
+    const actualId = id ? parseInt(id) : this.accountValue?.id;
+    if (!actualId) {
+      throw new Error('No user ID available for profile update');
+    }
+    return this.update(actualId, params);
+  }
+
+  deleteUser(id: string | undefined): Observable<any> {
+    const actualId = id ? parseInt(id) : this.accountValue?.id;
+    if (!actualId) {
+      throw new Error('No user ID available for deletion');
+    }
+    return this.delete(actualId);
+  }
+
   // JWT refresh timer
   private refreshTokenTimeout?: ReturnType<typeof setTimeout>;
 

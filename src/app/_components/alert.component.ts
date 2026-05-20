@@ -105,4 +105,9 @@ export class AlertComponent implements OnInit, OnDestroy {
     }
 
     return classes.join(' ');
+  }
+
+  private scheduleDetectChanges(): void {
+    this.cdr.markForCheck();
+  }
 }

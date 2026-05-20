@@ -4,8 +4,23 @@ import { ActivatedRoute } from '@angular/router';
 import { AccountService } from '../_services/account.service';
 import { first } from 'rxjs/operators';
 import { MustMatch } from '../_helpers/must-match.validator';
-@Component({ templateUrl: 'reset-password.component.html', standalone: false })
+
+
+export enum TokenStatus {
+  Validating = 'Validating',
+  Invalid = 'Invalid',
+  Valid = 'Valid'
+}
+
+@Component({ 
+  templateUrl: 'reset-password.component.html', 
+  standalone: false
+})
 export class ResetPasswordComponent implements OnInit {
+  
+  tokenStatus: TokenStatus = TokenStatus.Validating; 
+  TokenStatus = TokenStatus;
+
   form!: FormGroup;
   loading = false;
   submitted = false;
@@ -21,7 +36,7 @@ export class ResetPasswordComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     }, { 
-      validator: MustMatch('password', 'confirmPassword') // Changed from 'validators' to 'validator'
+      validator: MustMatch('password', 'confirmPassword')
     });
   }
 
@@ -44,10 +59,3 @@ export class ResetPasswordComponent implements OnInit {
       });
   }
 }
-
-// REMOVE this entire class at the bottom:
-// export class MustMatch {
-//   static validate(c1: string, c2: string) {
-//     ...
-//   }
-// }
