@@ -12,12 +12,16 @@ import { fakeBackendProvider } from './_helpers/fake-backend';
 import { Alert } from './_models';
 import { AlertComponent } from './_components';
 import { HomeComponent } from './home';
+import { LoginComponent } from './account/login.component';
+import { RegisterComponent } from './account/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AlertComponent,
-    HomeComponent
+    HomeComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
