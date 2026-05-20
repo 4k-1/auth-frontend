@@ -9,10 +9,15 @@ import { JwtInterceptor } from './_helpers/jwt.interceptor';
 import { ErrorInterceptor } from './_helpers/error.interceptor';
 import { environment } from '../environments/environment';
 import { fakeBackendProvider } from './_helpers/fake-backend';
+import { Alert } from './_models';
+import { AlertComponent } from './_components';
+import { HomeComponent } from './home';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AlertComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

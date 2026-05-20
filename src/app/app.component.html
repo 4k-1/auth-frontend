@@ -1,21 +1,20 @@
-<nav class="navbar">
-  <div class="nav-brand">
-    <a routerLink="/"> AuthSystem</a>
-  </div>
-  <div class="nav-links">
-    <ng-container *ngIf="account; else guestLinks">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
-      <a routerLink="/profile" routerLinkActive="active">Profile</a>
-      <a *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active">Admin</a>
-      <button class="btn-logout" (click)="logout()">Logout</button>
-      <span class="user-badge" [class.admin]="isAdmin">{{ account.role }}</span>
-    </ng-container>
-    <ng-template #guestLinks>
-      <a routerLink="/account/login" routerLinkActive="active">Login</a>
-      <a routerLink="/account/register" routerLinkActive="active" class="btn-register">Register</a>
-    </ng-template>
-  </div>
-</nav>
-<main class="main-content">
+<div class="app-container" [ngClass]="{ 'bg-light': account }">
+  <!-- main nav -->
+  <nav class="navbar navbar-expand navbar-dark bg-dark px-3" *ngIf="account">
+    <div class="navbar-nav">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item nav-link">Home</a>
+      <a routerLink="/profile" routerLinkActive="active" class="nav-item nav-link">Profile</a>
+      <a *ngIf="account.role === Role.Admin" routerLink="/admin" routerLinkActive="active" class="nav-item nav-link">Admin</a>
+      <button (click)="logout()" class="btn btn-link nav-item nav-link">Logout</button>
+    </div>
+  </nav>
+
+  <!-- subnav router outlet -->
+  <router-outlet name="subnav"></router-outlet>
+
+  <!-- global alert -->
+  <alert></alert>
+
+  <!-- main router outlet -->
   <router-outlet></router-outlet>
-</main>
+</div>
