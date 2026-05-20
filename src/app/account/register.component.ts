@@ -30,6 +30,7 @@ export class RegisterComponent implements OnInit {
   loading = false;
   submitted = false;
   error = '';
+  success = '';  // ✅ ADDED success message
 
   constructor(
     private fb: FormBuilder,
@@ -40,7 +41,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      title: ['', Validators.required],  // 👈 Title dropdown
+      title: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -57,24 +58,83 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     this.error = '';
+    this.success = '';  // Clear any previous messages
+
+    // Log form values for debugging (remove in production)
+    console.log('Form submitted:', this.form.value);
+    console.log('Form valid:', this.form.valid);
 
     if (this.form.invalid) {
+      console.log('Form is invalid');
+      // Log which fields are invalid
+      Object.keys(this.form.controls).forEach(key => {
+        const control = this.form.get(key);
+        if (control?.invalid) {
+          console.log(`${key} is invalid:`, control.errors);
+        }
+      });
       return;
     }
 
     this.loading = true;
-    this.accountService.register(this.form.value)
+    
+    // Prepare data for API (ensure all fields are correct)
+    const registrationData = {
+      title: this.f['title'].value,
+      firstName: this.f['firstName'].value,
+      lastName: this.f['lastName'].value,
+      email: this.f['email'].value,
+      password: this.f['password'].value,
+      confirmPassword: this.f['confirmPassword'].value,
+      acceptTerms: this.f['acceptTerms'].value
+    };
+
+    this.accountService.register(registrationData)
       .pipe(first())
       .subscribe({
-        next: () => {
+        next: (response) => {
+          console.log('Registration successful:', response);
+          // Navigate to login with success parameter
           this.router.navigate(['/account/login'], { 
             queryParams: { registered: true } 
           });
         },
-        error: error => {
-          this.error = error.error?.message || error.message || 'Registration failed';
+        error: (error) => {
+          console.error('Registration error:', error);
+          
+          // Better error messages based on response
+          if (error.error?.message) {
+            this.error = error.error.message;
+          } else if (error.message) {
+            this.error = error.message;
+          } else if (error.status === 0) {
+            this.error = 'Cannot connect to server. Please check your internet connection.';
+          } else if (error.status === 409) {
+            this.error = 'Email already registered. Please use a different email or login.';
+          } else if (error.status === 400) {
+            this.error = 'Invalid registration data. Please check all fields.';
+          } else {
+            this.error = 'Registration failed. Please try again later.';
+          }
+          
           this.loading = false;
         }
       });
+  }
+
+  // Helper method to clear errors (useful for form reset)
+  clearForm() {
+    this.form.reset({
+      title: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      acceptTerms: false
+    });
+    this.submitted = false;
+    this.error = '';
+    this.success = '';
   }
 }

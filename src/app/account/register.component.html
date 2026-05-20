@@ -1,5 +1,17 @@
 <h3 class="card-header">Register</h3>
 <div class="card-body">
+     <!-- ✅ SUCCESS MESSAGE (if any) -->
+    <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{success}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    
+    <!-- ✅ ERROR MESSAGE (if any) -->
+    <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{error}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="form">
         
         <!-- Title Dropdown -->
