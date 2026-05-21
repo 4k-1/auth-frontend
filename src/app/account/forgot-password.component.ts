@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
+import { AlertService } from '../_services/alert.service';
 
 @Component({ templateUrl: 'forgot-password.component.html', standalone: false })
 export class ForgotPasswordComponent implements OnInit {
@@ -10,7 +11,8 @@ export class ForgotPasswordComponent implements OnInit {
   error = '';
   success = '';
 
-  constructor(private fb: FormBuilder, private accountService: AccountService) {}
+  constructor(private fb: FormBuilder, private accountService: AccountService,
+              private alertService: AlertService) {}
 
   ngOnInit() {
     this.form = this.fb.group({ email: ['', [Validators.required, Validators.email]] });
@@ -24,7 +26,11 @@ export class ForgotPasswordComponent implements OnInit {
     this.loading = true;
     this.accountService.forgotPassword(this.f['email'].value)
       .subscribe({
-        next: (res: any) => { this.success = res.message; this.loading = false; },
+        next: (res: any) => { 
+          this.success = res.message; 
+          this.alertService.success(res.message);
+          this.loading = false; 
+        },
         error: err => { this.error = err; this.loading = false; }
       });
   }
