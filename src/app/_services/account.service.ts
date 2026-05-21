@@ -54,6 +54,11 @@ export class AccountService {
     return this.http.post(`${baseUrl}/forgot-password`, { email });
   }
 
+  // ✅ ADDED THIS METHOD
+  validateResetToken(token: string): Observable<any> {
+    return this.http.post(`${baseUrl}/validate-reset-token`, { token });
+  }
+
   resetPassword(token: string, password: string, confirmPassword: string): Observable<any> {
     return this.http.post(`${baseUrl}/reset-password`, { token, password, confirmPassword });
   }
