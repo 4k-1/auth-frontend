@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 
-import { UserService, AlertService } from '../_services';
+import {  AccountService , AlertService } from '../_services';
 
 @Component({
   selector: 'app-profile-update',
@@ -20,7 +20,7 @@ export class UpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private userService: UserService,
+    private userService: AccountService,
     private alertService: AlertService
   ) { }
 
