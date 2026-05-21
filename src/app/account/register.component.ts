@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '../_services/account.service';
+import { AlertService } from '../_services/alert.service';
 import { first } from 'rxjs/operators';
 
 // Custom validator for matching passwords
@@ -35,6 +36,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private accountService: AccountService,
+    private alertService: AlertService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -94,10 +96,8 @@ export class RegisterComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Registration successful:', response);
-          // Navigate to login with success parameter
-          this.router.navigate(['/account/login'], { 
-            queryParams: { registered: true } 
-          });
+          this.alertService.success('Registration successful, please check your email for verification link.', { keepAfterRouteChange: true });
+          this.router.navigate(['/account/login']);
         },
         error: (error) => {
           console.error('Registration error:', error);

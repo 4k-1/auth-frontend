@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '../_services/account.service';
+import { AlertService } from '../_services/alert.service';
 
 @Component({
   templateUrl: './login.component.html'
@@ -14,8 +15,13 @@ export class LoginComponent implements OnInit {
   success = '';  // ✅ ADD THIS
   returnUrl = '/';
 
-  constructor(private fb: FormBuilder, private accountService: AccountService,
-              private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private alertService: AlertService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     // Initialize form FIRST
@@ -59,6 +65,7 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: () => {
           console.log('Login successful!');
+          this.alertService.success('Login successful', { keepAfterRouteChange: true });
           this.router.navigateByUrl(this.returnUrl);
         },
         error: (err) => { 
